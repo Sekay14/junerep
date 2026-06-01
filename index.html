@@ -51,7 +51,8 @@ const yesBtn=document.getElementById("yes");
 let scale=1;
 
 const phrases=[
-"Может всё-таки да? ❤️","Я почти поймал кнопку Нет 😄","Судьба намекает на Да ❤️","Я всё ещё надеюсь 🌹","Кажется кнопка Нет сломалась 😁","Подумай ещё раз ❤️"
+"Может всё-таки да? ❤️","Я почти поймал кнопку Нет 😄","Судьба намекает на Да ❤️",
+"Ну пожалуйста 😊","Я всё ещё надеюсь 🌹","Кажется кнопка Нет сломалась 😁","Подумай ещё раз ❤️"
 ];
 
 function createHearts(){
@@ -101,8 +102,8 @@ document.body.innerHTML=`
 <p>Теперь крутим колесо судьбы 🎡</p>
 
 <div style="position:relative;margin-bottom:20px;">
-<div style="position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:40px;z-index:10;">▼</div>
-<canvas id="wheel" width="420" height="420"></canvas>
+<div style="position:relative;margin-bottom:20px;">
+    <canvas id="wheel" width="420" height="420"></canvas>
 </div>
 
 <button id="spinBtn" style="background:#e91e63;color:white;">Крутить колесо 🎡</button>
@@ -152,7 +153,6 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
    document.getElementById("result").innerHTML=`
    <h2 style="margin-top:30px;color:#e91e63;">🌹 Наше свидание:</h2>
    <p style="font-size:32px;font-weight:bold;margin-top:15px;">${selected}</p>
-
 <div style="
 margin-top:25px;
 padding:20px;
@@ -186,8 +186,7 @@ color:#888;
 Жду нашей встречи 🌹
 </p>
 
-</div>
-   
+</div>   
 `;
  },5000);
 });
