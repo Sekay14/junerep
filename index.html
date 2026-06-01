@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для Алины ❤️</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+ font-family:Arial,sans-serif;
+ background:linear-gradient(135deg,#ffd6e7,#fff0f5);
+ min-height:100vh;
+ overflow-x:hidden;
+}
+.container{
+ min-height:100vh;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ padding:20px;
+}
+h1{color:#e91e63;margin-bottom:20px}
+p{font-size:24px;color:#444;margin-bottom:20px}
+button{
+ border:none;border-radius:12px;padding:15px 35px;
+ font-size:22px;cursor:pointer
+}
+#yes{background:#4CAF50;color:#fff}
+#no{position:absolute;background:#f44336;color:#fff}
+.heart,.firework{position:fixed;pointer-events:none}
+.heart{font-size:28px;animation:fly 4s linear forwards}
+.firework{font-size:30px;animation:explode 2s linear forwards}
+#wheel{width:min(75vw,420px);height:min(75vw,420px);transition:transform 5s ease-out}
+@keyframes fly{from{transform:translateY(0);opacity:1}to{transform:translateY(-500px);opacity:0}}
+@keyframes explode{from{transform:scale(.5);opacity:1}to{transform:scale(2);opacity:0}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 id="question">Алина ❤️<br><br>У меня к тебе один важный вопрос...</h1>
+<p>Согласишься сходить со мной на свидание? 🌹</p>
+<button id="yes">Да ❤️</button>
+</div>
+<button id="no">Нет 🙈</button>
+
+<script>
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+let scale=1;
+
+const phrases=[
+"Может всё-таки да? ❤️","Я почти поймал кнопку Нет 😄","Судьба намекает на Да ❤️","Я всё ещё надеюсь 🌹","Кажется кнопка Нет сломалась 😁","Подумай ещё раз ❤️"
+];
+
+function createHearts(){
+ for(let i=0;i<8;i++){
+  const h=document.createElement("div");
+  h.className="heart"; h.innerHTML="❤️";
+  h.style.left=Math.random()*window.innerWidth+"px";
+  h.style.top=window.innerHeight+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+ }
+}
+
+function fireworks(){
+ const icons=["🎆","✨","🎉","💖"];
+ for(let i=0;i<30;i++){
+  const f=document.createElement("div");
+  f.className="firework";
+  f.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+  f.style.left=Math.random()*window.innerWidth+"px";
+  f.style.top=Math.random()*window.innerHeight+"px";
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),2000);
+ }
+}
+
+function moveButton(){
+ const maxX=window.innerWidth-noBtn.offsetWidth;
+ const maxY=window.innerHeight-noBtn.offsetHeight;
+ noBtn.style.left=Math.random()*maxX+"px";
+ noBtn.style.top=Math.random()*maxY+"px";
+ scale=Math.min(scale+0.1,2);
+ yesBtn.style.transform=`scale(${scale})`;
+ document.getElementById("question").innerHTML=phrases[Math.floor(Math.random()*phrases.length)];
+ createHearts();
+}
+
+noBtn.addEventListener("mouseover",moveButton);
+noBtn.addEventListener("click",moveButton);
+moveButton();
+
+yesBtn.addEventListener("click",()=>{
+document.body.innerHTML=`
+<div class="container">
+<h1>❤️ Ура! ❤️</h1>
+<h2 style="margin-bottom:20px;">Алина согласилась!</h2>
+<p>Теперь крутим колесо судьбы 🎡</p>
+
+<div style="position:relative;margin-bottom:20px;">
+<div style="position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:40px;z-index:10;">▼</div>
+<canvas id="wheel" width="420" height="420"></canvas>
+</div>
+
+<button id="spinBtn" style="background:#e91e63;color:white;">Крутить колесо 🎡</button>
+<div id="result"></div>
+</div>`;
+
+const dates=["🐎 Конная","🎬 Кино","🚗 Авто","🏺 Гончарка","🏎️ Картинг","☕ Кофейня","🌇 Закат","🌌 Звезды"];
+const fullNames={
+"🐎 Конная":"🐎 Конная прогулка",
+"🎬 Кино":"🎬 Кино под открытым небом",
+"🚗 Авто":"🚗 Автокинотеатр",
+"🏺 Гончарка":"🏺 Гончарный мастер-класс",
+"🏎️ Картинг":"🏎️ Картинг",
+"☕ Кофейня":"☕ Уютная кофейня с десертами",
+"🌇 Закат":"🌇 Прогулка на закате",
+"🌌 Звезды":"🌌 Смотреть звезды"
+};
+
+const canvas=document.getElementById("wheel");
+const ctx=canvas.getContext("2d");
+const colors=["#ffb6c1","#ffd700","#98fb98","#87cefa","#dda0dd","#ff7f7f","#40e0d0","#ff69b4"];
+const size=210;
+const arc=(2*Math.PI)/dates.length;
+
+for(let i=0;i<dates.length;i++){
+ ctx.beginPath();
+ ctx.moveTo(size,size);
+ ctx.arc(size,size,size,arc*i,arc*(i+1));
+ ctx.fillStyle=colors[i];
+ ctx.fill();
+ ctx.save();
+ ctx.translate(size,size);
+ ctx.rotate(arc*i+arc/2);
+ ctx.fillStyle="#000";
+ ctx.font="bold 12px Arial";
+ ctx.fillText(dates[i],90,5);
+ ctx.restore();
+}
+
+document.getElementById("spinBtn").addEventListener("click",()=>{
+ const wheel=document.getElementById("wheel");
+ wheel.style.transform=`rotate(${1800+Math.random()*1800}deg)`;
+ setTimeout(()=>{
+   const short=dates[Math.floor(Math.random()*dates.length)];
+   const selected=fullNames[short];
+   fireworks();
+   document.getElementById("result").innerHTML=`
+   <h2 style="margin-top:30px;color:#e91e63;">🌹 Наше свидание:</h2>
+   <p style="font-size:32px;font-weight:bold;margin-top:15px;">${selected}</p>
+
+<div style="
+margin-top:25px;
+padding:20px;
+background:white;
+border-radius:15px;
+box-shadow:0 0 15px rgba(0,0,0,.1);
+max-width:500px;
+">
+
+<p style="
+font-size:24px;
+color:#e91e63;
+font-weight:bold;
+">
+❤️ Отличный выбор!
+</p>
+
+<p style="
+font-size:20px;
+margin-top:10px;
+color:#555;
+">
+Теперь осталось только сообщить Серику о своем решении 😊
+</p>
+
+<p style="
+margin-top:15px;
+font-size:18px;
+color:#888;
+">
+Жду нашей встречи 🌹
+</p>
+
+</div>
+   
+`;
+ },5000);
+});
+});
+</script>
+</body>
+</html>
